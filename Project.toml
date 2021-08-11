@@ -1,0 +1,12 @@
+name = "AcousticFeatures"
+uuid = "6a458947-61d4-43a6-b30c-4a7a83d249ad"
+authors = ["Taiyang Zhao <sonosole@163.com>"]
+version = "0.1.0"
+
+
+[compat]
+julia = "1.0 - 1.6"
+
+
+[deps]
+FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
