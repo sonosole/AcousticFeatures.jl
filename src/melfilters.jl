@@ -17,9 +17,9 @@ mutable struct MelFilters
 
     function MelFilters(;
         winlen::Int       = 256,
-        stride::Int       = 128,
-        nbanks::Int       = 32,
+        stride::Int       = winlen>>1,
         nffts::Int        = winlen,
+        nbanks::Int       = 32,
         alpha::Real       = 0.97,
         fs::Int           = 16000,
         epsilon::Real     = 1e-6,
@@ -52,7 +52,7 @@ function filterbanks(nbanks::Int, nffts::Int, fs::Int)
 end
 
 
-function (filter::MelFilters)(wav)
+function (filter::MelFilters)(wav, func::Union{Function,Nothing}=log)
     W = filter.melbank
     α = filter.alpha
     B = filter.epsilon
@@ -65,7 +65,11 @@ function (filter::MelFilters)(wav)
     frames, T = splitwav(data, windown, winlen, stride)  # 分帧
     C = fft(frames, 1)       # 时域到频域 𝐑ⁿ ↣ 𝐂ⁿ ,按列计算
     X = abs2.(C[1:F,1:T])    # 功率谱,提取有用部分
-    return log.(W * X .+ B)  # 对数梅尔功率谱
+    if func !== nothing
+        return func.(W * X .+ B)  # 幅值对数梅尔功率谱
+    else
+        return W * X             # 幅值线性梅尔功率谱
+    end
 end
 
 
