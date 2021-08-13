@@ -66,9 +66,9 @@ function (filter::MelFilters)(wav, func::Union{Function,Nothing}=log)
     C = fft(frames, 1)       # 时域到频域 𝐑ⁿ ↣ 𝐂ⁿ ,按列计算
     X = abs2.(C[1:F,1:T])    # 功率谱,提取有用部分
     if func !== nothing
-        return func.(W * X .+ B)  # 幅值对数梅尔功率谱
+        return func.(W * X .+ B)
     else
-        return W * X             # 幅值线性梅尔功率谱
+        return W * X
     end
 end
 

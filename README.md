@@ -37,7 +37,7 @@ plts = []
 data, Fs = wavread("MonoFile.wav");
 data .= data .- sum(data)/length(data)
 
-fbank = MelFilter(
+fbank = MelFilters(
       fs = 16000,
    alpha = 0.97,
   winlen = 512,
@@ -47,12 +47,17 @@ fbank = MelFilter(
  winfunc = hanning)
 
 # for Filterbank Energies
-feat = fbank(copy(data), nothing)
+feat1 = fbank(copy(data), nothing)
 
-# for Log Filterbank Energies 
-feat = fbank(copy(data))
+# for Log Filterbank Energies (default)
+feat2 = fbank(copy(data), log)
+
+# for other Filterbank Energies
+feat3 = fbank(copy(data), x->x^0.5)
 
 push!(plts, plot(data, xlims=(1,length(data))))
-push!(plts, heatmap(feat, legend=nothing))
-plot(plts...,layout=(2,1),legend=nothing, framestyle=:box, ticks=nothing)
+push!(plts, heatmap(feat1, legend=nothing))
+push!(plts, heatmap(feat2, legend=nothing))
+push!(plts, heatmap(feat3, legend=nothing))
+plot(plts...,layout=(4,1),legend=nothing, framestyle=:box, ticks=nothing)
 ```

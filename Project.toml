@@ -1,7 +1,7 @@
 name = "AcousticFeatures"
 uuid = "6a458947-61d4-43a6-b30c-4a7a83d249ad"
 authors = ["Taiyang Zhao <sonosole@163.com>"]
-version = "0.1.0"
+version = "0.1.1"
 
 
 [compat]
