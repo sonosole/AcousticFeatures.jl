@@ -17,9 +17,9 @@ triangular]
 
 plts = []
 data, Fs = wavread("AMonoAudioFile.wav");
-for (i,winfn) in enumerate(fnlist)
+for winfn in fnlist
     fbank = MelFilters(
-          fs = 16000,
+          fs = floor(Int,Fs),
        alpha = 0.5,
       winlen = 1024,
       stride = 128,

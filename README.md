@@ -38,7 +38,7 @@ data, Fs = wavread("MonoFile.wav");
 data .= data .- sum(data)/length(data)
 
 fbank = MelFilters(
-      fs = 16000,
+      fs = floor(Int,Fs),
    alpha = 0.97,
   winlen = 512,
   stride = 128,
