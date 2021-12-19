@@ -43,7 +43,7 @@ fbank = MelFilters(
   winlen = 512,
   stride = 128,
   nbanks = 128,
- epsilon = 1e-5,
+     eps = 1e-5,
  winfunc = hanning)
 
 # for Filterbank Energies
