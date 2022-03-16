@@ -23,13 +23,13 @@ function splitwav(data, win, winlen::Int, stride::Int)
     return frames, nframes
 end
 
-function spectrum(data, win, winlen::Int, stride::Int, nffts::Int)
+function spectrum(data, win, winlen::Int, stride::Int, nffts::Int; dtype=Float32)
     # @assert nffts>=winlen
     T = div(length(data)-winlen, stride) + 1   # nframs
     F = nffts>>1                               # max effective freq bin index
     firstIds = (0:(T-1)) .* stride .+ 1        # 帧起始下标
     lasstIds = firstIds .+ (winlen - 1)        # 帧结束下标
-    frames   = zeros(eltype(data), nffts, T)   # 如果 nffts>winlen 则零填充帧
+    frames   = zeros(dtype, nffts, T)   # 如果 nffts>winlen 则零填充帧
     for i = 1:T
         frames[1:winlen,i] = data[firstIds[i]:lasstIds[i]] .* win
     end
