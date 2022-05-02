@@ -7,7 +7,7 @@ mutable struct OnlineMelSpec{T}
     nbanks  :: Int   # 梅尔滤波器个数
     nffts   :: Int   # 傅立叶变换点数
     maxfreq :: Int   # 频域最大有效频率下标
-    lastone :: T     # 上一帧最后一个采样点
+    keptone :: T     # 上一帧需要保留的采样点
     alpha   :: T     # 预加重系数，默认 0.97
     eps     :: T     # 防止下溢系数
     winfunc :: Function       # 窗计算函数，如 hanning
@@ -68,11 +68,11 @@ function (filter::OnlineMelSpec{T})(wav::S, func::Union{Function,Nothing}=log) w
     nffts  = filter.nffts
 
     # 滤波
-    lastone = wav[stride]
+    keptone = wav[stride]
     for i = winlen:-1:2
         wav[i] = wav[i] - α * wav[i-1]
-    end;wav[1] = wav[1] - α * filter.lastone
-    filter.lastone = lastone
+    end;wav[1] = wav[1] - α * filter.keptone
+    filter.keptone = keptone
 
     # 加窗 & fft & 功率谱
     d = wav .* window
