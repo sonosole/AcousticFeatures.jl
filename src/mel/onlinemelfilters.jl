@@ -1,5 +1,3 @@
-export OnlineMelSpec
-
 mutable struct OnlineMelSpec{T}
     fs      :: Int   # 采样率，一般 16kHz
     winlen  :: Int   # 分帧参数-帧长
@@ -93,7 +91,7 @@ function (filter::OnlineMelSpec{T})(wav::S, func::Union{Function,Nothing}=log) w
     end
 end
 
-function Base.show(io::IO, f::OnlineMelSpec{T}) where T
+function Base.show(io::IO, ::MIME"text/plain", f::OnlineMelSpec{T}) where T
     winlen = trunc(f.winlen / f.fs * 1000, digits=3)
     stride = trunc(f.stride / f.fs * 1000, digits=3)
     println(io, "═════════════════════════════")

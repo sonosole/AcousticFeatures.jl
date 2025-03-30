@@ -1,6 +1,3 @@
-using FFTW:fft
-export MelSpec
-
 mutable struct MelSpec{T}
     fs      :: Int   # 采样率，一般 16kHz
     winlen  :: Int   # 分帧参数-帧长
@@ -66,12 +63,20 @@ function filterbanks(nbanks::Int, nffts::Int, fs::Int; dtype::DataType=Float32)
     for n = 1:nbanks
         cFmel = cFmel + dFmel
         for m = 1:MAX
-            if ( Fmel[m] >= cFmel-dFmel ) && ( Fmel[m] <= cFmel+dFmel )
+            if (cFmel - dFmel) ≤ Fmel[m] ≤ (cFmel + dFmel)
                 bank[n,m] = 1.0 - abs( Fmel[m] - cFmel )/dFmel
             end
         end
     end
     return bank
+end
+
+
+function filterwav(data, α)
+    n = length(data)
+    @. data[1:n-1] = data[2:n] - α * data[1:n-1]
+    data[n : n] = data[n-1 : n-1]
+    return data
 end
 
 
@@ -95,7 +100,7 @@ function (filter::MelSpec{T})(wav::S, func::Union{Function,Nothing}=log) where {
     end
 end
 
-function Base.show(io::IO, f::MelSpec{T}) where T
+function Base.show(io::IO, ::MIME"text/plain", f::MelSpec{T}) where T
     winlen = trunc(f.winlen / f.fs * 1000, digits=3)
     stride = trunc(f.stride / f.fs * 1000, digits=3)
     println(io, "════════════════════════════")

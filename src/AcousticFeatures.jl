@@ -1,8 +1,8 @@
 module AcousticFeatures
 
-include("./kits.jl")
+include("kits.jl")
 
-include("./winfuns.jl")
+include("winfuns.jl")
 using .WindowFunctions
 export barthann
 export bartlett
@@ -17,8 +17,14 @@ export parzen
 export rectangular
 export triangular
 
+using FFTW:fft
 
-include("./melfilters.jl")
-include("./onlinemelfilters.jl")
+include("mel/melfilters.jl")
+include("mel/onlinemelfilters.jl")
+export MelSpec
+export OnlineMelSpec
+
+include("pow/powerspec.jl")
+export PowerSpec
 
 end # module
